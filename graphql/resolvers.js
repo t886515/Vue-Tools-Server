@@ -4,8 +4,29 @@ const {
   updateTodo,
   removeTodo,
 } = require('./database-query.js');
+const { GraphQLScalarType } = require('graphql');
 
 const resolvers = {
+  Date: new GraphQLScalarType({
+    name: 'Date',
+    description: 'Date custom scalar type',
+    // gets invoked to parse client input that was passed through variables
+    parseValue: value => {
+      return new Date(value);
+    },
+    // this field is for value to client
+    serialize: value => {
+      return new Date(value);
+    },
+    // gets invoked to parse client input that was passed
+    // inline(have arg defining using this type) in the query.
+    parseLiteral(ast) {
+      if (ast.value) {
+        return new Date(ast.value);
+      }
+      return null;
+    },
+  }),
   Query: {
     Todos: (obj, arg) => {
       if (arg.id) {
@@ -28,9 +49,13 @@ const resolvers = {
         return `Input Not Found.`;
       }
     },
-    updateTodo: (obj, arg) => {
-      updateTodo(arg.id, arg.input);
-      return `Todo with id ${arg.id} updated.`;
+    updateTodo: async (obj, arg) => {
+      const { input, id } = arg;
+      if (input && id) {
+        return await updateTodo(id, input);
+      } else {
+        return `Input Not Found.`;
+      }
     },
     removeTodo: (obj, arg) => {
       removeTodo(arg.id);

@@ -1,36 +1,16 @@
 const { makeExecutableSchema } = require('graphql-tools');
 
 const resolvers = require('./resolvers.js');
+const fs = require('fs');
+const path = require('path');
 
-const typeDefs = `
+// TODO: implement error handling in the future
+const fileNames = fs.readdirSync(path.join(__dirname, './schema'), 'utf8');
+const gqlSchemas = fileNames.map(fileName => {
+  return fs.readFileSync(path.join(__dirname, `./schema/${fileName}`), 'utf8');
+});
 
-type Query {
-  Todos(id:String): [Todo]
-}
-
-type Todo {
-  id: String
-  value: String
-  notes: String
-  isComplete: Boolean
-  createDate: String
-  updateDate: String
-}
-
-type Mutation {
-  createTodo(input:TodoInput): Todo
-  updateTodo(id:String!, input:TodoInput): Todo
-  removeTodo(id:String!): String
-}
-
-input TodoInput {
-  value: String
-  notes: String
-  isComplete: Boolean
-}
-
-
-`;
+const typeDefs = gqlSchemas;
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 

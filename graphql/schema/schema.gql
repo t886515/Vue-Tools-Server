@@ -1,0 +1,28 @@
+type Query {
+  Todos(id: String, date: Date): [Todo]
+}
+
+type Todo {
+  id: String
+  value: String
+  notes: String
+  isComplete: Boolean
+  inProgress: Boolean
+  createDate: String
+  _createDate: Date
+  updateDate: String
+  _updateDate: Date
+}
+
+type Mutation {
+  createTodo(input: TodoInput): Todo
+  updateTodo(id: String!, input: TodoInput): Todo
+  removeTodo(id: String!): String
+}
+
+input TodoInput {
+  value: String
+  notes: String
+  isComplete: Boolean
+  inProgress: Boolean
+}

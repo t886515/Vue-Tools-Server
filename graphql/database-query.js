@@ -5,7 +5,7 @@ const moment = require('moment');
 const dialogueTitle = '[Mongo Query]';
 
 const saveTodo = data => {
-  const { value, notes, isComplete } = data;
+  const { value, notes, isComplete, inProgress } = data;
   const _createDate = moment();
   const createDate = _createDate.format('MMMM Do YYYY, h:mm:ss a');
 
@@ -13,12 +13,14 @@ const saveTodo = data => {
     value,
     notes,
     isComplete,
+    inProgress,
     createDate,
     _createDate,
     updateDate: createDate,
     _updateDate: _createDate,
   })
     .save()
+    // .lean()
     .then(createdTodo => {
       console.log(`${dialogueTitle} New Todo Saved.`);
       return createdTodo;
@@ -33,11 +35,16 @@ const updateTodo = (id, data) => {
   const _updateDate = moment();
   const updateDate = _updateDate.format('MMMM Do YYYY, h:mm:ss a');
 
-  return ToDoModel.update(
+  return ToDoModel.findByIdAndUpdate(
     { _id: id },
-    { value, notes, isComplete, updateDate, _updateDate },
+    { ...data, updateDate, _updateDate },
+    {
+      new: true,
+    },
   )
+    .lean()
     .then(updatedTodo => {
+      return updatedTodo;
       console.log(`${dialogueTitle} Todo Updated.`);
     })
     .catch(e => {
