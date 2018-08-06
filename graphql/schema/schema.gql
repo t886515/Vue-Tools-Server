@@ -12,6 +12,8 @@ type Todo {
   _createDate: Date
   updateDate: String
   _updateDate: Date
+  belongDate: Date
+  belongDateIndex: Int
 }
 
 type Mutation {
@@ -25,4 +27,5 @@ input TodoInput {
   notes: String
   isComplete: Boolean
   inProgress: Boolean
+  belongDateIndex: Int
 }

@@ -11,6 +11,8 @@ const ToDoSchema = new Schema({
   _createDate: Date,
   updateDate: String,
   _updateDate: Date,
+  belongDate: Date,
+  belongDateIndex: Number,
 });
 
 module.exports = {

@@ -5,7 +5,7 @@ const moment = require('moment');
 const dialogueTitle = '[Mongo Query]';
 
 const saveTodo = data => {
-  const { value, notes, isComplete, inProgress } = data;
+  const { value, notes, isComplete, inProgress, belongDateIndex } = data;
   const _createDate = moment();
   const createDate = _createDate.format('MMMM Do YYYY, h:mm:ss a');
 
@@ -18,6 +18,8 @@ const saveTodo = data => {
     _createDate,
     updateDate: createDate,
     _updateDate: _createDate,
+    belongDate: _createDate,
+    belongDateIndex,
   })
     .save()
     // .lean()
