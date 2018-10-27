@@ -7,13 +7,15 @@ const ToDoSchema = new Schema({
   notes: String,
   isComplete: Boolean,
   inProgress: Boolean,
-  createDate: String,
-  _createDate: Date,
-  updateDate: String,
-  _updateDate: Date,
-  belongDate: Date,
-  belongDateIndex: Number,
+  createDate: Date,
+  lastUpdateDate: Date,
+  completeDate: Date,
+  stashedDate: Date,
 });
+
+// ToDoSchema.add({
+//   todos: [ToDoSchema],
+// });
 
 module.exports = {
   ToDoSchema,

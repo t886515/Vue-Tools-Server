@@ -2,6 +2,7 @@ const {
   getTodo,
   saveTodo,
   updateTodo,
+  completeTodo,
   removeTodo,
 } = require('./database-query.js');
 const { GraphQLScalarType } = require('graphql');
@@ -55,6 +56,14 @@ const resolvers = {
         return await updateTodo(id, input);
       } else {
         return `Input Not Found.`;
+      }
+    },
+    completeTodo: async (obj, arg) => {
+      const { input, id } = arg;
+      if (input && id) {
+        return await completeTodo(id, input);
+      } else {
+        return `Input or ID is missing.`;
       }
     },
     removeTodo: (obj, arg) => {

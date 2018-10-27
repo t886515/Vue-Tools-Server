@@ -5,9 +5,9 @@ const moment = require('moment');
 const dialogueTitle = '[Mongo Query]';
 
 const saveTodo = data => {
-  const { value, notes, isComplete, inProgress, belongDateIndex } = data;
-  const _createDate = moment();
-  const createDate = _createDate.format('MMMM Do YYYY, h:mm:ss a');
+  const { value, notes, isComplete, inProgress } = data;
+  const createDate = moment();
+  // const createDate = _createDate.format('MMMM Do YYYY, h:mm:ss a');
 
   return (newTodoEntry = new ToDoModel({
     value,
@@ -15,11 +15,9 @@ const saveTodo = data => {
     isComplete,
     inProgress,
     createDate,
-    _createDate,
-    updateDate: createDate,
-    _updateDate: _createDate,
-    belongDate: _createDate,
-    belongDateIndex,
+    lastUpdateDate: createDate,
+    completeDate: null,
+    stashedDate: null,
   })
     .save()
     // .lean()
@@ -33,21 +31,21 @@ const saveTodo = data => {
 };
 
 const updateTodo = (id, data) => {
-  const { value, notes, isComplete } = data;
-  const _updateDate = moment();
-  const updateDate = _updateDate.format('MMMM Do YYYY, h:mm:ss a');
+  const { value, notes } = data;
+  const lastUpdateDate = moment();
+  // const updateDate = _updateDate.format('MMMM Do YYYY, h:mm:ss a');
 
   return ToDoModel.findByIdAndUpdate(
     { _id: id },
-    { ...data, updateDate, _updateDate },
+    { value, notes, lastUpdateDate },
     {
       new: true,
     },
   )
     .lean()
     .then(updatedTodo => {
-      return updatedTodo;
       console.log(`${dialogueTitle} Todo Updated.`);
+      return updatedTodo;
     })
     .catch(e => {
       console.error(`${dialogueTitle} Failed to Update With: ${e}.`);
@@ -73,9 +71,32 @@ const getTodo = id => {
   }
 };
 
+const completeTodo = (id, input) => {
+  const { isComplete } = input;
+  const lastUpdateDate = moment();
+  const completeDate = isComplete? lastUpdateDate : null;
+
+  return ToDoModel.findByIdAndUpdate(
+    { _id: id },
+    { isComplete, lastUpdateDate, completeDate },
+    {
+      new: true,
+    },
+  )
+    .lean()
+    .then(updatedTodo => {
+      console.log(`${dialogueTitle} Todo completed.`);
+      return updatedTodo;
+    })
+    .catch(e => {
+      console.error(`${dialogueTitle} Failed to Update With: ${e}.`);
+    });
+}
+
 module.exports = {
   saveTodo,
   updateTodo,
   getTodo,
+  completeTodo,
   removeTodo,
 };

@@ -8,18 +8,21 @@ type Todo {
   notes: String
   isComplete: Boolean
   inProgress: Boolean
-  createDate: String
-  _createDate: Date
-  updateDate: String
-  _updateDate: Date
-  belongDate: Date
-  belongDateIndex: Int
+  createDate: Date
+  lastUpdateDate: Date
+  completeDate: Date
+  stashedDate: Date
 }
 
 type Mutation {
   createTodo(input: TodoInput): Todo
   updateTodo(id: String!, input: TodoInput): Todo
+  completeTodo(id: String!, input: completeTodoInput): Todo
   removeTodo(id: String!): String
+}
+
+input completeTodoInput {
+  isComplete: Boolean
 }
 
 input TodoInput {
@@ -27,5 +30,4 @@ input TodoInput {
   notes: String
   isComplete: Boolean
   inProgress: Boolean
-  belongDateIndex: Int
 }
