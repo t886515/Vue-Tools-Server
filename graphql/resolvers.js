@@ -3,8 +3,10 @@ const {
   saveTodo,
   updateTodo,
   completeTodo,
-  removeTodo,
+  removeTodo
 } = require('./database-query.js');
+
+const { getSummonerInfo } = require('./api-requests.js');
 const { GraphQLScalarType } = require('graphql');
 
 const resolvers = {
@@ -26,7 +28,7 @@ const resolvers = {
         return new Date(ast.value);
       }
       return null;
-    },
+    }
   }),
   Query: {
     Todos: (obj, arg) => {
@@ -36,12 +38,23 @@ const resolvers = {
         return getTodo();
       }
     },
+    SummonerInfo: (obj, arg) => {
+      if (arg.summonerName) {
+        const { summonerName = 'Laeticia' } = arg;
+        return getSummonerInfo(summonerName);
+      } else {
+        return {
+          name: 'Please enter a valid summoner name.'
+        };
+      }
+    }
   },
   Todo: {
     id: obj => {
       return obj._id;
-    },
+    }
   },
+
   Mutation: {
     createTodo: async (obj, arg) => {
       if (arg.input) {
@@ -69,8 +82,8 @@ const resolvers = {
     removeTodo: (obj, arg) => {
       removeTodo(arg.id);
       return `Todo with id ${arg.id} removed.`;
-    },
-  },
+    }
+  }
 };
 
 module.exports = resolvers;

@@ -1,0 +1,8 @@
+type SummonerInfo(summonerName: String!) {
+  id: Int
+  accountId: String
+  name: String
+  profileIconId: Int
+  revisionDate: Int
+  summonerLevel: Int
+}
