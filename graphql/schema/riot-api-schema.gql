@@ -1,4 +1,4 @@
-type SummonerInfo(summonerName: String!) {
+type SummonerInfo {
   id: Int
   accountId: String
   name: String

@@ -1,6 +1,6 @@
 type Query {
   Todos(id: String, date: Date): [Todo]
-  SummonerInfo(summonerName: String): SummonerInfo
+  SummonerInfo(summonerName: String!): SummonerInfo
 }
 
 type Todo {
